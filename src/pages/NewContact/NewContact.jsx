@@ -2,8 +2,10 @@ import * as Yup from 'yup';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { v4 as uuidv4 } from 'uuid';
 import { useNavigate } from 'react-router-dom';
+import {contactValidationSchema} from '../validation/validation';
 
 export default function NewContact({ onNewContact }){
+    const navigate = useNavigate()
     const initialValues = {
         id: uuidv4(),
         firstName: '',
@@ -16,18 +18,6 @@ export default function NewContact({ onNewContact }){
         favorite: false,
     }
 
-    const validationSchema = Yup.object().shape({
-        firstName: Yup.string().min(2,'Too Short!').max(50,'Too Long!').required('Required'),
-        lastName: Yup.string().min(2,'Too Short!').max(50,'Too Long!').required('Required'),
-        phone: Yup.string().required('Required'),
-        email: Yup.string().email('Invalid email').required('Required'),
-        avatar: Yup.string().required('Required'),
-        gender: Yup.string().required('Required'),
-        status: Yup.string().required('Required'),
-        favourite: Yup.boolean()
-    });
-
-    const navigate = useNavigate()
     const handleSubmit = (value) =>{
         onNewContact(value)
         navigate('/')
@@ -39,8 +29,6 @@ export default function NewContact({ onNewContact }){
                     <span className="text-xs font-semibold tracking-widest text-gray-400">NEW CONTACT</span>
                 </div>
             </div>
-
-
 
             <div className="flex-1 bg-white flex flex-col lg:flex-row">
                 <div className="w-full lg:w-1/3 p-6 sm:p-8 lg:p-12 flex flex-col justify-start border-b-2 lg:border-b-0 lg:border-r-2 border-gray-300">
@@ -78,7 +66,7 @@ export default function NewContact({ onNewContact }){
 
                     <Formik
                         initialValues={initialValues}
-                        validationSchema={validationSchema}
+                        validationSchema={contactValidationSchema}
                         onSubmit={handleSubmit}
                     >
                         {({ isSubmitting }) => (
