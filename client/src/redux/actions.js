@@ -1,4 +1,4 @@
-import { ADD_CONTACT, EDIT_CONTACT, DELETE_CONTACT, SET_SEARCH } from './type.js';
+import { ADD_CONTACT, EDIT_CONTACT, DELETE_CONTACT, SET_SEARCH, SET_USER, LOGOUT_USER } from './type.js';
 
 export const addContact = (contact) => ({
     type: ADD_CONTACT,
@@ -18,4 +18,13 @@ export const deleteContact = (id) => ({
 export const setSearch = (searchText) => ({
     type: SET_SEARCH,
     payload: searchText
+});
+
+export const setUser = (userData) => ({
+    type: SET_USER,
+    payload: userData
+});
+
+export const logoutUser = () => ({
+    type: LOGOUT_USER
 });

@@ -1,6 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { useState } from 'react';
-import { Provider } from 'react-redux';
+import { Provider, useSelector, useDispatch } from 'react-redux';
+import { setUser, logoutUser } from './redux/actions.js';
 import store from './store.js';
 
 import ContactList from "./pages/ContactList/ContactList";
@@ -13,27 +13,21 @@ import Welcome from "./pages/Welcome/Welcome";
 import Header from './components/Header/Header';
 
 function AppContent() {
-    const [authState, setAuthState] = useState(() => ({
-        token: localStorage.getItem('token'),
-        user: localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : null,
-    }));
+    const auth = useSelector(state => state.auth);
+    const dispatch = useDispatch();
 
     const handleAuthSuccess = ({ token, user }) => {
-        localStorage.setItem('token', token);
-        localStorage.setItem('user', JSON.stringify(user));
-        setAuthState({ token, user });
+        dispatch(setUser({ token, user }));
         window.location.href = '/';
     };
 
     const handleLogout = () => {
-        localStorage.removeItem('token');
-        localStorage.removeItem('user');
-        setAuthState({ token: null, user: null });
+        dispatch(logoutUser());
     };
 
-    const routes = authState.user ? (
+    const routes = auth.user ? (
         <>
-            <Header user={authState.user} onLogout={handleLogout} />
+            <Header />
             <Routes>
                 <Route path="/" element={<ContactList />} />
                 <Route path="/new-contact" element={<NewContact />} />
@@ -46,8 +40,8 @@ function AppContent() {
     ) : (
         <Routes>
             <Route path="/" element={<Welcome />} />
-            <Route path="/login" element={<SignIn onLoginSuccess={handleAuthSuccess} />} />
-            <Route path="/register" element={<SignUp onRegisterSuccess={handleAuthSuccess} />} />
+            <Route path="/login" element={<SignIn />} />
+            <Route path="/register" element={<SignUp />} />
             <Route path="*" element={<Welcome />} />
         </Routes>
     );

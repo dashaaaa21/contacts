@@ -1,8 +1,6 @@
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { deleteContact } from "../../redux/actions.js";
-import EditButton from "../EditButton/EditButton";
-import DeleteButton from "../DeleteButton/DeleteButton";
 
 export default function ContactItem() {
     const contacts = useSelector(state => state);
@@ -11,8 +9,6 @@ export default function ContactItem() {
     const searchText = contacts.search ? contacts.search.toLowerCase() : '';
     const allContacts = contacts.contacts || [];
     
-
-    
     const filteredContacts = allContacts.filter(contact =>
         (contact.firstName && contact.firstName.toLowerCase().includes(searchText)) ||
         (contact.lastName && contact.lastName.toLowerCase().includes(searchText)) ||
@@ -20,6 +16,12 @@ export default function ContactItem() {
         (contact.phone && contact.phone.toLowerCase().includes(searchText)) ||
         (contact.status && contact.status.toLowerCase().includes(searchText))
     );
+
+    const handleDelete = (contactId) => {
+        if (window.confirm('You sure?')) {
+            dispatch(deleteContact(contactId));
+        }
+    };
 
     return (
         <div className="overflow-x-auto">
@@ -63,9 +65,16 @@ export default function ContactItem() {
                             <td className="px-2 sm:px-6 py-2 sm:py-4 whitespace-nowrap">
                                 <div className="flex gap-1 sm:gap-2">
                                     <Link to={`/update-contact/${contact.id}`}>
-                                        <EditButton />
+                                        <button className="px-3 py-1 text-xs font-semibold text-blue-700 bg-blue-100 rounded hover:bg-blue-200 transition-colors">
+                                            Edit
+                                        </button>
                                     </Link>
-                                    <DeleteButton contactId={contact.id} onDelete={() => dispatch(deleteContact(contact.id))} />
+                                    <button
+                                        onClick={() => handleDelete(contact.id)}
+                                        className="px-3 py-1 text-xs font-semibold text-red-700 bg-red-100 rounded hover:bg-red-200 transition-colors"
+                                    >
+                                        Delete
+                                    </button>
                                 </div>
                             </td>
                         </tr>

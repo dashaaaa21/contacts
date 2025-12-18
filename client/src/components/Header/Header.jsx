@@ -1,8 +1,13 @@
 
 import { Link } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { logoutUser } from '../../redux/actions.js';
 import { getUserFirstLetterForAvatar, getUserNameForGreeting } from '../../utils/userUtils';
 
-export default function Header({ user, onLogout }) {
+export default function Header() {
+    const auth = useSelector(state => state.auth);
+    const dispatch = useDispatch();
+    const user = auth.user;
     return (
         <header className="w-full bg-black text-white">
             <div className="py-6 px-6 md:px-10 flex flex-col md:flex-row items-center justify-between gap-4 md:gap-0">
@@ -33,7 +38,7 @@ export default function Header({ user, onLogout }) {
                 <div className="flex items-center gap-3 md:gap-4 flex-wrap justify-center">
                     {user ? (
                         <button
-                            onClick={onLogout}
+                            onClick={() => dispatch(logoutUser())}
                             className="bg-red-500 text-white px-4 md:px-6 py-2 rounded-full font-medium hover:bg-red-400 transition">
                             Logout
                         </button>

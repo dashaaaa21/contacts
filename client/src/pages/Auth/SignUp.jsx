@@ -1,6 +1,9 @@
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { setUser } from '../../redux/actions.js';
 
-export default function SignUp({ onRegisterSuccess }) {
+export default function SignUp() {
+  const dispatch = useDispatch();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -32,11 +35,8 @@ export default function SignUp({ onRegisterSuccess }) {
         return;
       }
 
-      localStorage.setItem('token', data.token);
-      
-      if (onRegisterSuccess) {
-        onRegisterSuccess({ token: data.token, user: data.user });
-      }
+      dispatch(setUser({ token: data.token, user: data.user }));
+      window.location.href = '/';
       
     } catch {
       setMessage('Server error. Please try again.');

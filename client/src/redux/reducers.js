@@ -1,4 +1,4 @@
-import { ADD_CONTACT, EDIT_CONTACT, DELETE_CONTACT, SET_SEARCH} from "./type.js";
+import { ADD_CONTACT, EDIT_CONTACT, DELETE_CONTACT, SET_SEARCH, SET_USER, LOGOUT_USER} from "./type.js";
 
 const initialState = {
     contacts: [
@@ -114,6 +114,10 @@ const initialState = {
         }
         ],
     search: '',
+    auth: {
+        token: localStorage.getItem('token'),
+        user: localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : null,
+    }
 }
 
 export const reducer = (state = initialState, action) => {
@@ -126,6 +130,14 @@ export const reducer = (state = initialState, action) => {
             return {...state, contacts: state.contacts.filter(contact => contact.id !== action.payload)}
         case SET_SEARCH:
             return {...state, search: action.payload}
+        case SET_USER:
+            localStorage.setItem('token', action.payload.token);
+            localStorage.setItem('user', JSON.stringify(action.payload.user));
+            return {...state, auth: { token: action.payload.token, user: action.payload.user }}
+        case LOGOUT_USER:
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            return {...state, auth: { token: null, user: null }}
         default: return state;
     }
 }
