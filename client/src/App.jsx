@@ -1,6 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { Provider, useSelector, useDispatch } from 'react-redux';
-import { setUser, logoutUser } from './redux/actions.js';
+import { Provider, useSelector } from 'react-redux';
 import store from './store.js';
 
 import ContactList from "./pages/ContactList/ContactList";
@@ -14,16 +13,6 @@ import Header from './components/Header/Header';
 
 function AppContent() {
     const auth = useSelector(state => state.auth);
-    const dispatch = useDispatch();
-
-    const handleAuthSuccess = ({ token, user }) => {
-        dispatch(setUser({ token, user }));
-        window.location.href = '/';
-    };
-
-    const handleLogout = () => {
-        dispatch(logoutUser());
-    };
 
     const routes = auth.user ? (
         <>
