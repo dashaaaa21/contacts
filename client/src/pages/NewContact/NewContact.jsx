@@ -2,13 +2,15 @@ import * as Yup from 'yup';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { v4 as uuidv4 } from 'uuid';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { addContact } from '../../redux/actions.js';
 import {contactValidationSchema} from '../../validation/validation';
 
 export default function NewContact(){
     const dispatch = useDispatch();
     const navigate = useNavigate()
+const contactStatuses = useSelector(state => state.contactStatuses)
+
     const initialValues = {
         id: uuidv4(),
         firstName: '',
@@ -167,9 +169,15 @@ export default function NewContact(){
                                         className="border-b-2 border-gray-300 focus:border-lime-400 px-0 py-2 text-sm sm:text-base focus:outline-none transition-colors bg-white text-black"
                                     >
                                         <option value="">Select Status</option>
-                                        <option value="work">Work</option>
-                                        <option value="family">Family</option>
-                                        <option value="friends">Friends</option>
+                                        {Object.keys(contactStatuses).map((status, index) => (
+                                            <option 
+                                                key={index} 
+                                                value={status}
+                                                style={{ backgroundColor: contactStatuses[status].bg }}
+                                            >
+                                                {status.charAt(0).toUpperCase() + status.slice(1)}
+                                            </option>
+                                        ))}
                                     </Field>
                                     <ErrorMessage name="status" component="div" className="text-red-500 text-xs mt-1 min-h-[16px]" />
                                 </div>

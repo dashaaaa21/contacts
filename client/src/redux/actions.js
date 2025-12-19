@@ -1,4 +1,4 @@
-import { ADD_CONTACT, EDIT_CONTACT, DELETE_CONTACT, SET_SEARCH, SET_USER, LOGOUT_USER } from './type.js';
+import { ADD_CONTACT, EDIT_CONTACT, DELETE_CONTACT, SET_SEARCH, SET_USER, LOGOUT_USER, ADD_STATUS, EDIT_STATUS, DELETE_STATUS } from './type.js';
 
 export const addContact = (contact) => ({
     type: ADD_CONTACT,
@@ -27,4 +27,19 @@ export const setUser = (userData) => ({
 
 export const logoutUser = () => ({
     type: LOGOUT_USER
+});
+
+export const addStatus = (statusName, bg) => ({
+    type: ADD_STATUS,
+    payload: { statusName, bg }
+});
+
+export const editStatus = (oldStatus, newStatus, newBg) => ({
+    type: EDIT_STATUS,
+    payload: { oldStatus, newStatus, newBg }
+});
+
+export const deleteStatus = (statusName) => ({
+    type: DELETE_STATUS,
+    payload: { statusName }
 });

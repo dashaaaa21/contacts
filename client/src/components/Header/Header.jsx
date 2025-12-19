@@ -31,6 +31,7 @@ export default function Header() {
                 <nav className="flex flex-wrap items-center gap-4 md:gap-10 text-gray-300 justify-center">
                     <Link to="/" className="text-white hover:text-white transition">Contact List</Link>
                     <Link to="/new-contact" className="hover:text-white transition">New Contact</Link>
+                    <Link to="/contact-statuses" className="hover:text-white transition">Statuses</Link>
                 </nav>
 
 

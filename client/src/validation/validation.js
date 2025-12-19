@@ -46,3 +46,11 @@ export const contactValidationSchema = Yup.object().shape({
 });
 
 
+export const statusValidationSchema = Yup.object().shape({
+  statusName: Yup.string()
+    .min(2, 'Status name must be at least 2 characters')
+    .max(20, 'Status name must be less than 20 characters')
+    .required('Status name is required'),
+  bg: Yup.string()
+    .required('Color is required')
+});

@@ -10,6 +10,9 @@ import SignIn from "./pages/Auth/SignIn";
 import SignUp from "./pages/Auth/SignUp";
 import Welcome from "./pages/Welcome/Welcome";
 import Header from './components/Header/Header';
+import ContactsStatuses from './pages/ContactsStatuses/ContactsStatuses';
+import AddContactStatus from './pages/AddContactStatus/AddContactStatus';
+import EditContactStatus from './pages/EditContactStatus/EditContactStatus';
 
 function AppContent() {
     const auth = useSelector(state => state.auth);
@@ -21,8 +24,9 @@ function AppContent() {
                 <Route path="/" element={<ContactList />} />
                 <Route path="/new-contact" element={<NewContact />} />
                 <Route path="/update-contact/:id" element={<UpdateContact />} />
-                <Route path="/login" element={<ContactList />} />
-                <Route path="/register" element={<ContactList />} />
+                <Route path="/contact-statuses" element={<ContactsStatuses />} />
+                <Route path="/contact-statuses/add-contact-status" element={<AddContactStatus />} />
+                <Route path="/contact-statuses/edit-contact-status/:statusName" element={<EditContactStatus />} />
                 <Route path="*" element={<NotFound />} />
             </Routes>
         </>

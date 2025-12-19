@@ -1,4 +1,4 @@
-import { ADD_CONTACT, EDIT_CONTACT, DELETE_CONTACT, SET_SEARCH, SET_USER, LOGOUT_USER} from "./type.js";
+import {ADD_CONTACT, EDIT_CONTACT, DELETE_CONTACT, SET_SEARCH, SET_USER, LOGOUT_USER, ADD_STATUS, EDIT_STATUS, DELETE_STATUS} from "./type.js";
 
 const initialState = {
     contacts: [
@@ -112,7 +112,14 @@ const initialState = {
             phone: "0912345689",
             status: "others",
         }
-        ],
+    ],
+    contactStatuses: {
+        work: { count: 0, bg: '#3b82f6' },
+        family: { count: 0, bg: '#22c55e' },
+        private: { count: 0, bg: '#a855f7' },
+        friends: { count: 0, bg: '#eab308' },
+        others: { count: 0, bg: '#ef4444' }
+    },
     search: '',
     auth: {
         token: localStorage.getItem('token'),
@@ -121,24 +128,89 @@ const initialState = {
 }
 
 export const reducer = (state = initialState, action) => {
-    switch(action.type){
+    switch (action.type) {
         case ADD_CONTACT:
             return {...state, contacts: [...state.contacts, action.payload]}
+        
         case EDIT_CONTACT:
-            return {...state, contacts: state.contacts.map(contact => contact.id === action.payload.id ? action.payload.updatedContact : contact)}
+            return {
+                ...state,
+                contacts: state.contacts.map(contact => 
+                    contact.id === action.payload.id ? action.payload.updatedContact : contact
+                )
+            }
+        
         case DELETE_CONTACT:
             return {...state, contacts: state.contacts.filter(contact => contact.id !== action.payload)}
+        
         case SET_SEARCH:
             return {...state, search: action.payload}
+        
         case SET_USER:
             localStorage.setItem('token', action.payload.token);
             localStorage.setItem('user', JSON.stringify(action.payload.user));
-            return {...state, auth: { token: action.payload.token, user: action.payload.user }}
+            return {...state, auth: {token: action.payload.token, user: action.payload.user}}
+        
         case LOGOUT_USER:
             localStorage.removeItem('token');
             localStorage.removeItem('user');
-            return {...state, auth: { token: null, user: null }}
-        default: return state;
+            return {...state, auth: {token: null, user: null}}
+        
+        case ADD_STATUS:
+            if(state.contactStatuses[action.payload.statusName]){
+                return state
+            }
+            return {
+                ...state,
+                contactStatuses: {
+                    ...state.contactStatuses,
+                    [action.payload.statusName]: { count: 0, bg: action.payload.bg }
+                }
+            }
+        
+        case EDIT_STATUS: {
+            if(!state.contactStatuses[action.payload.oldStatus]){
+                return state
+            }
+            const oldStatusData = state.contactStatuses[action.payload.oldStatus];
+            const updatedStatuses = {...state.contactStatuses};
+            delete updatedStatuses[action.payload.oldStatus];
+            updatedStatuses[action.payload.newStatus] = { 
+                count: oldStatusData.count, 
+                bg: action.payload.newBg 
+            };
+            const updatedContacts = state.contacts.map(contact => 
+                contact.status === action.payload.oldStatus 
+                    ? {...contact, status: action.payload.newStatus} 
+                    : contact
+            );
+            return {
+                ...state,
+                contactStatuses: updatedStatuses,
+                contacts: updatedContacts
+            }
+        }
+        
+        case DELETE_STATUS: {
+            if(!state.contactStatuses[action.payload.statusName]){
+                return state
+            }
+            const newStatuses = {...state.contactStatuses};
+            delete newStatuses[action.payload.statusName];
+            const contactsAfterDelete = state.contacts.map(contact => 
+                contact.status === action.payload.statusName 
+                    ? {...contact, status: 'others'} 
+                    : contact
+            );
+            return {
+                ...state,
+                contactStatuses: newStatuses,
+                contacts: contactsAfterDelete
+            }
+        }
+        
+        default:
+            return state;
     }
 }
 
