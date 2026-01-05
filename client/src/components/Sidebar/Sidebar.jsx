@@ -1,7 +1,8 @@
-import {useSelector} from "react-redux";
+import { useAppSelector } from "../../redux/hooks";
 
 export default function Sidebar() {
-    const contacts = useSelector(state => state);
+    const contacts = useAppSelector(state => state.contacts.contacts);
+    
     const statusCounts = {
         work: 0,
         family: 0,
@@ -9,10 +10,8 @@ export default function Sidebar() {
         friends: 0,
         others: 0,
     };
-
-    const contactsList = contacts.contacts || [];
     
-    contactsList.forEach(contact => {
+    contacts.forEach(contact => {
         const status = contact.status || 'others';
         if (statusCounts[status] !== undefined) {
             statusCounts[status] += 1;
@@ -21,7 +20,7 @@ export default function Sidebar() {
         }
     });
 
-    const totalContacts = contactsList.length;
+    const totalContacts = contacts.length;
 
     return (
         <aside className="w-64 text-gray-900 rounded-lg p-4">

@@ -1,15 +1,15 @@
 import { Link } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
-import { deleteContact } from "../../redux/actions.js";
+import { useAppSelector, useAppDispatch } from "../../redux/hooks";
+import { removeContact } from "../../redux/contactsSlice";
 
 export default function ContactItem() {
-    const contacts = useSelector(state => state);
-    const dispatch = useDispatch();
+    const contacts = useAppSelector(state => state.contacts.contacts);
+    const search = useAppSelector(state => state.contacts.search);
+    const dispatch = useAppDispatch();
     
-    const searchText = contacts.search ? contacts.search.toLowerCase() : '';
-    const allContacts = contacts.contacts || [];
+    const searchText = search ? search.toLowerCase() : '';
     
-    const filteredContacts = allContacts.filter(contact =>
+    const filteredContacts = contacts.filter(contact =>
         (contact.firstName && contact.firstName.toLowerCase().includes(searchText)) ||
         (contact.lastName && contact.lastName.toLowerCase().includes(searchText)) ||
         (contact.email && contact.email.toLowerCase().includes(searchText)) ||
@@ -19,7 +19,7 @@ export default function ContactItem() {
 
     const handleDelete = (contactId) => {
         if (window.confirm('You sure?')) {
-            dispatch(deleteContact(contactId));
+            dispatch(removeContact(contactId));
         }
     };
 
@@ -42,7 +42,7 @@ export default function ContactItem() {
                 <tbody className="divide-y divide-gray-200">
                 {filteredContacts.length === 0 ? (
                     <tr>
-                        <td colSpan="8" className="px-2 sm:px-6 py-4 text-center text-gray-500">
+                        <td colSpan={8} className="px-2 sm:px-6 py-4 text-center text-gray-500">
                             No contacts found
                         </td>
                     </tr>
@@ -52,7 +52,7 @@ export default function ContactItem() {
                             <th scope="row" className="px-2 sm:px-6 py-2 sm:py-4 whitespace-nowrap text-gray-900 font-medium">{index + 1}</th>
                             <td className="px-2 sm:px-6 py-2 sm:py-4 whitespace-nowrap">
                                 <img
-                                    src={`https://randomuser.me/api/portraits/${contact.gender === 'woman' ? 'women' : 'men'}/${contact.avatar}.jpg`}
+                                    src={`https://randomuser.me/api/portraits/${contact.gender === 'women' ? 'women' : 'men'}/${contact.avatar}.jpg`}
                                     alt="avatar"
                                     className="w-10 h-10 rounded-full object-cover"
                                 />

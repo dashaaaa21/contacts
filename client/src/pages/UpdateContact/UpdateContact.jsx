@@ -1,24 +1,27 @@
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
-import { editContact } from '../../redux/actions.js';
+import { useAppSelector, useAppDispatch } from '../../redux/hooks';
+import { updateContact } from '../../redux/contactsSlice';
 import { contactValidationSchema } from '../../validation/validation';
 
 export default function UpdateContact() {
     const { id } = useParams();
     const navigate = useNavigate();
-    const dispatch = useDispatch();
-    const contacts = useSelector(state => state);
+    const dispatch = useAppDispatch();
+    const contacts = useAppSelector(state => state.contacts.contacts);
+    const contactStatuses = useAppSelector(state => state.contacts.contactStatuses);
 
-    const contact = contacts.contacts.find(contact => contact.id === id);
+    const contact = contacts.find(contact => contact.id === id);
 
     if (!contact) return <h2 className="p-6 text-xl font-bold">Contact not found</h2>;
 
     const initialValues = { ...contact };
 
     const handleSubmit = (values) => {
-        dispatch(editContact(id, values));
-        navigate('/');
+        if (id) {
+            dispatch(updateContact({ id, contact: values }));
+            navigate('/');
+        }
     };
 
     return (
@@ -56,8 +59,8 @@ export default function UpdateContact() {
                                 <label htmlFor="gender">Gender</label>
                                 <Field as="select" name="gender" id="gender" className="border-b-2 border-gray-300 px-2 py-1 w-full">
                                     <option value="">Select Gender</option>
-                                    <option value="man">Man</option>
-                                    <option value="woman">Woman</option>
+                                    <option value="men">Men</option>
+                                    <option value="women">Women</option>
                                 </Field>
                                 <ErrorMessage name="gender" component="div" className="text-red-500 text-xs" />
                             </div>
@@ -66,11 +69,11 @@ export default function UpdateContact() {
                                 <label htmlFor="status">Status</label>
                                 <Field as="select" name="status" id="status" className="border-b-2 border-gray-300 px-2 py-1 w-full">
                                     <option value="">Select Status</option>
-                                    <option value="Family">Family</option>
-                                    <option value="Friends">Friends</option>
-                                    <option value="Work">Work</option>
-                                    <option value="Private">Private</option>
-                                    <option value="Others">Others</option>
+                                    {Object.keys(contactStatuses).map((status, index) => (
+                                        <option key={index} value={status}>
+                                            {status.charAt(0).toUpperCase() + status.slice(1)}
+                                        </option>
+                                    ))}
                                 </Field>
                                 <ErrorMessage name="status" component="div" className="text-red-500 text-xs" />
                             </div>

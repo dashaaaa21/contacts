@@ -1,11 +1,11 @@
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import { addStatus } from '../../redux/actions.js';
-import { statusValidationSchema } from '../../validation/validation.js';
+import { useAppDispatch } from '../../redux/hooks';
+import { createStatus } from '../../redux/contactsSlice';
+import { statusValidationSchema } from '../../validation/validation';
 
 export default function AddContactStatus() {
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
     const navigate = useNavigate();
 
     const initialValues = {
@@ -13,8 +13,8 @@ export default function AddContactStatus() {
         bg: '#0d6424ff',
     };
 
-    const handleSubmit = (values) => {
-        dispatch(addStatus(values.statusName.toLowerCase(), values.bg));
+    const handleSubmit = async (values) => {
+        await dispatch(createStatus({ statusName: values.statusName.toLowerCase(), bg: values.bg }));
         navigate('/contact-statuses');
     };
 

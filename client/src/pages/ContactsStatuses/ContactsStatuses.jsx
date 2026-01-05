@@ -1,10 +1,15 @@
 import { Link } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
-import { deleteStatus } from '../../redux/actions.js';
+import { useEffect } from 'react';
+import { useAppSelector, useAppDispatch } from '../../redux/hooks';
+import { fetchStatuses, removeStatus } from '../../redux/contactsSlice';
 
 export default function ContactsStatuses() {
-    const contactStatuses = useSelector(state => state.contactStatuses);
-    const dispatch = useDispatch();
+    const contactStatuses = useAppSelector(state => state.contacts.contactStatuses);
+    const dispatch = useAppDispatch();
+
+    useEffect(() => {
+        dispatch(fetchStatuses());
+    }, [dispatch]);
 
     return (
         <main className="relative w-full min-h-screen bg-gray-100 flex flex-col lg:flex-row">
@@ -60,7 +65,8 @@ export default function ContactsStatuses() {
                                                     <button 
                                                         onClick={() => {
                                                             if(window.confirm(`Delete status "${status}"?`)) {
-                                                                dispatch(deleteStatus(status))
+                                                                const statusId = contactStatuses[status].id;
+                                                                dispatch(removeStatus({ id: statusId, statusName: status }));
                                                             }
                                                         }}
                                                         className="px-3 py-1 text-xs font-semibold text-red-700 bg-red-100 rounded hover:bg-red-200 transition-colors"

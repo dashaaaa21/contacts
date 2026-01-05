@@ -1,13 +1,13 @@
-
 import { Link } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
-import { logoutUser } from '../../redux/actions.js';
+import { useAppSelector, useAppDispatch } from '../../redux/hooks';
+import { logoutUser } from '../../redux/authSlice';
 import { getUserFirstLetterForAvatar, getUserNameForGreeting } from '../../utils/userUtils';
 
 export default function Header() {
-    const auth = useSelector(state => state.auth);
-    const dispatch = useDispatch();
+    const auth = useAppSelector(state => state.auth);
+    const dispatch = useAppDispatch();
     const user = auth.user;
+    
     return (
         <header className="w-full bg-black text-white">
             <div className="py-6 px-6 md:px-10 flex flex-col md:flex-row items-center justify-between gap-4 md:gap-0">
@@ -33,8 +33,6 @@ export default function Header() {
                     <Link to="/new-contact" className="hover:text-white transition">New Contact</Link>
                     <Link to="/contact-statuses" className="hover:text-white transition">Statuses</Link>
                 </nav>
-
-
 
                 <div className="flex items-center gap-3 md:gap-4 flex-wrap justify-center">
                     {user ? (

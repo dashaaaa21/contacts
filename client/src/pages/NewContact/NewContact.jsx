@@ -1,15 +1,14 @@
-import * as Yup from 'yup';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { v4 as uuidv4 } from 'uuid';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import { addContact } from '../../redux/actions.js';
-import {contactValidationSchema} from '../../validation/validation';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import { createContact } from '../../redux/contactsSlice';
+import { contactValidationSchema } from '../../validation/validation';
 
-export default function NewContact(){
-    const dispatch = useDispatch();
-    const navigate = useNavigate()
-const contactStatuses = useSelector(state => state.contactStatuses)
+export default function NewContact() {
+    const dispatch = useAppDispatch();
+    const navigate = useNavigate();
+    const contactStatuses = useAppSelector(state => state.contacts.contactStatuses);
 
     const initialValues = {
         id: uuidv4(),
@@ -18,15 +17,16 @@ const contactStatuses = useSelector(state => state.contactStatuses)
         phone: '',
         email: '',
         avatar: '',
-        gender: '',
+        gender: 'men',
         status: '',
         favorite: false,
-    }
+    };
 
-    const handleSubmit = (value) =>{
-        dispatch(addContact(value))
-        navigate('/')
-    }
+    const handleSubmit = (value) => {
+        dispatch(createContact(value));
+        navigate('/');
+    };
+
     return (
         <main className="relative w-full min-h-screen bg-gray-100 flex flex-col lg:flex-row">
             <div className="hidden lg:flex w-16 bg-white border-r-2 border-gray-300 items-center justify-center">
@@ -102,7 +102,7 @@ const contactStatuses = useSelector(state => state.contactStatuses)
                                     <ErrorMessage name="lastName" component="div" className="text-red-500 text-xs mt-1 min-h-[16px]" />
                                 </div>
 
-                                <div className="flex flex-col h-20">
+                                <div className="flex-col h-20">
                                     <label htmlFor="phone" className="text-black font-semibold mb-1 sm:mb-2 text-xs sm:text-sm uppercase tracking-wide">
                                         Phone
                                     </label>
@@ -152,8 +152,8 @@ const contactStatuses = useSelector(state => state.contactStatuses)
                                         className="border-b-2 border-gray-300 focus:border-lime-400 px-0 py-2 text-sm sm:text-base focus:outline-none transition-colors bg-white text-black"
                                     >
                                         <option value="">Select Gender</option>
-                                        <option value="male">Male</option>
-                                        <option value="female">Female</option>
+                                        <option value="men">Male</option>
+                                        <option value="women">Female</option>
                                     </Field>
                                     <ErrorMessage name="gender" component="div" className="text-red-500 text-xs mt-1 min-h-[16px]" />
                                 </div>
@@ -183,8 +183,8 @@ const contactStatuses = useSelector(state => state.contactStatuses)
                                 </div>
 
                                 <div className="flex items-center space-x-3 pt-4 h-12">
-                                    <Field type="checkbox" name="favourite" id="favourite" className="accent-lime-400 w-4 h-4 sm:w-5 sm:h-5" />
-                                    <label htmlFor="favourite" className="text-black font-semibold text-xs sm:text-sm uppercase tracking-wide">
+                                    <Field type="checkbox" name="favorite" id="favorite" className="accent-lime-400 w-4 h-4 sm:w-5 sm:h-5" />
+                                    <label htmlFor="favorite" className="text-black font-semibold text-xs sm:text-sm uppercase tracking-wide">
                                         Mark as Favourite
                                     </label>
                                 </div>
@@ -201,7 +201,6 @@ const contactStatuses = useSelector(state => state.contactStatuses)
                     </Formik>
                 </div>
             </div>
-
 
             <div className="hidden lg:flex w-16 bg-white border-l-2 border-gray-300 items-center justify-center">
                 <div className="transform rotate-90 whitespace-nowrap">

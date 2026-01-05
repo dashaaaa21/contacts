@@ -1,9 +1,9 @@
 import { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { setUser } from '../../redux/actions.js';
+import { useAppDispatch } from '../../redux/hooks';
+import { setUser } from '../../redux/authSlice';
 
 export default function SignUp() {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -102,4 +102,3 @@ export default function SignUp() {
     </div>
   );
 }
-

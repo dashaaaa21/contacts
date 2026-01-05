@@ -1,6 +1,9 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { Provider, useSelector } from 'react-redux';
-import store from './store.js';
+import { Provider } from 'react-redux';
+import { useEffect } from 'react';
+import { store } from './redux/store';
+import { useAppSelector, useAppDispatch } from './redux/hooks';
+import { fetchContacts, fetchStatuses } from './redux/contactsSlice';
 
 import ContactList from "./pages/ContactList/ContactList";
 import NewContact from "./pages/NewContact/NewContact";
@@ -15,7 +18,15 @@ import AddContactStatus from './pages/AddContactStatus/AddContactStatus';
 import EditContactStatus from './pages/EditContactStatus/EditContactStatus';
 
 function AppContent() {
-    const auth = useSelector(state => state.auth);
+    const auth = useAppSelector(state => state.auth);
+    const dispatch = useAppDispatch();
+
+    useEffect(() => {
+        if (auth.user) {
+            dispatch(fetchContacts());
+            dispatch(fetchStatuses());
+        }
+    }, [auth.user, dispatch]);
 
     const routes = auth.user ? (
         <>

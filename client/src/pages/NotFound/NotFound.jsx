@@ -9,7 +9,6 @@ export default function NotFound() {
                 </div>
             </div>
 
-
             <div className="flex-1 bg-white flex items-center justify-center p-6 sm:p-8 lg:p-12">
                 <div className="text-center max-w-4xl">
                     <div className="relative inline-block">
@@ -22,7 +21,6 @@ export default function NotFound() {
                         <div className="absolute top-2 right-1">
                             <img src="/not.png" alt="Stars background" />
                         </div>
-
                     </div>
                     
                     <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-black mt-6 mb-4">
@@ -42,7 +40,6 @@ export default function NotFound() {
                     </Link>
                 </div>
             </div>
-
 
             <div className="hidden lg:flex w-16 bg-white border-l-2 border-gray-300 items-center justify-center">
                 <div className="transform rotate-90 whitespace-nowrap">

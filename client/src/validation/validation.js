@@ -45,7 +45,6 @@ export const contactValidationSchema = Yup.object().shape({
   favorite: Yup.boolean()
 });
 
-
 export const statusValidationSchema = Yup.object().shape({
   statusName: Yup.string()
     .min(2, 'Status name must be at least 2 characters')

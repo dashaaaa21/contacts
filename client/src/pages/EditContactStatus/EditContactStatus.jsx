@@ -1,16 +1,18 @@
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import { editStatus } from '../../redux/actions.js';
-import { statusValidationSchema } from '../../validation/validation.js';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import { updateStatus } from '../../redux/contactsSlice';
+import { statusValidationSchema } from '../../validation/validation'
 
 export default function EditContactStatus() {
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
     const navigate = useNavigate();
     const { statusName } = useParams();
-    const status = useSelector(state => state.contactStatuses[statusName]);
+    const contactStatuses = useAppSelector(state => state.contacts.contactStatuses);
 
-    if (!status) {
+    const status = statusName ? contactStatuses[statusName] : null;
+
+    if (!status || !statusName) {
         return null;
     }
 
@@ -19,9 +21,13 @@ export default function EditContactStatus() {
         bg: status.bg,
     };
 
-    const handleSubmit = (values) => {
-        console.log(statusName, values.statusName, values.bg);
-        dispatch(editStatus(statusName, values.statusName, values.bg));
+    const handleSubmit = async (values) => {
+        const statusId = status.id;
+        await dispatch(updateStatus({ 
+            id: statusId, 
+            statusName: values.statusName.toLowerCase(), 
+            bg: values.bg 
+        }));
         navigate('/contact-statuses');
     };
 

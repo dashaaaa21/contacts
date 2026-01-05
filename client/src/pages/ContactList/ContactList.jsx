@@ -1,16 +1,16 @@
-import { useSelector, useDispatch } from 'react-redux';
-import { setSearch } from '../../redux/actions.js';
+import { useAppSelector, useAppDispatch } from '../../redux/hooks';
+import { setSearch } from '../../redux/contactsSlice';
 import ContactItem from "../../components/ContactItem/ContactItem";
-import Sidebar from "../../components/Sidebar/Sidebar.jsx";
+import Sidebar from "../../components/Sidebar/Sidebar";
 
 export default function ContactList() {
-    const contacts = useSelector(state => state);
-    const dispatch = useDispatch();
-
+    const contacts = useAppSelector(state => state.contacts.contacts);
+    const dispatch = useAppDispatch();
 
     const searchBySymbols = (symbols) => {
         dispatch(setSearch(symbols));
     };
+
     return (
         <main className="relative w-full min-h-screen bg-white flex flex-col lg:flex-row">
             <div className="hidden lg:flex w-12 bg-white border-r-2 border-gray-300 items-center justify-center">
@@ -68,7 +68,7 @@ export default function ContactList() {
                 </div>
                 
                 <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-black mb-6 sm:mb-8 leading-tight">
-                    My Contacts ({contacts.contacts ? contacts.contacts.length : 0})
+                    My Contacts ({contacts.length})
                 </h1>
                 <ContactItem />
             </div>
