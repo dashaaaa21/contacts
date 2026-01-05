@@ -1,9 +1,9 @@
-const bcrypt = require('bcrypt');
+import bcrypt from 'bcrypt';
+import User from '../models/User.js';
+import generateToken from '../utils/generateToken.js';
+import { initializeDefaultStatuses } from './statuses-controller.js';
 
-const User = require('../models/User');
-const generateToken = require('../utils/generateToken');
-
-const register = async (req, res) => {
+export const register = async (req, res) => {
   try {
     const { name, email, password } = req.body;
 
@@ -24,7 +24,9 @@ const register = async (req, res) => {
       password: hashedPassword,
     });
 
-    const token = generateToken(user._id);
+    await initializeDefaultStatuses(user._id);
+
+    const token = generateToken(user._id.toString());
 
     return res.status(201).json({
       token,
@@ -40,8 +42,7 @@ const register = async (req, res) => {
   }
 };
 
-
-const login = async (req, res) => {
+export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
 
@@ -59,7 +60,7 @@ const login = async (req, res) => {
       return res.status(400).json({ message: 'Invalid credentials' });
     }
 
-    const token = generateToken(user._id);
+    const token = generateToken(user._id.toString());
 
     return res.status(200).json({
       token,
@@ -74,9 +75,3 @@ const login = async (req, res) => {
     return res.status(500).json({ message: 'Server error' });
   }
 };
-
-module.exports = {
-  register,
-  login,
-};
-

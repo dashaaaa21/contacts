@@ -25,6 +25,16 @@ jobs:
         cd server
         npm ci
 
+    - name: TypeScript check
+      run: |
+        cd server
+        npx tsc --noEmit
+
+    - name: Build server
+      run: |
+        cd server
+        npm run build
+
     - name: Test server
       run: |
         cd server

@@ -1,15 +1,25 @@
 import { Link } from 'react-router-dom';
-import { useEffect } from 'react';
 import { useAppSelector, useAppDispatch } from '../../redux/hooks';
-import { fetchStatuses, removeStatus } from '../../redux/contactsSlice';
+import { removeStatus } from '../../redux/contactsSlice';
 
 export default function ContactsStatuses() {
     const contactStatuses = useAppSelector(state => state.contacts.contactStatuses);
+    const loading = useAppSelector(state => state.contacts.loading);
     const dispatch = useAppDispatch();
 
-    useEffect(() => {
-        dispatch(fetchStatuses());
-    }, [dispatch]);
+    console.log('ContactStatuses component - statuses:', contactStatuses);
+    console.log('Loading:', loading);
+    console.log('Status keys:', Object.keys(contactStatuses));
+
+    if (loading) {
+        return <div className="p-6 text-xl">Loading statuses...</div>;
+    }
+
+    const statusKeys = Object.keys(contactStatuses);
+    
+    if (statusKeys.length === 0) {
+        return <div className="p-6 text-xl">No statuses found. Please refresh the page.</div>;
+    }
 
     return (
         <main className="relative w-full min-h-screen bg-gray-100 flex flex-col lg:flex-row">

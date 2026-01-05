@@ -25,6 +25,16 @@ jobs:
         cd client
         npm ci
 
+    - name: TypeScript check
+      run: |
+        cd client
+        npx tsc --noEmit
+
+    - name: Lint code
+      run: |
+        cd client
+        npm run lint
+
     - name: Build project
       run: |
         cd client

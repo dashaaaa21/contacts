@@ -38,9 +38,24 @@ jobs:
         cd client
         npm run lint
 
+    - name: TypeScript check client
+      run: |
+        cd client
+        npx tsc --noEmit
+
     - name: Build client
       run: |
         cd client
+        npm run build
+
+    - name: TypeScript check server
+      run: |
+        cd server
+        npx tsc --noEmit
+
+    - name: Build server
+      run: |
+        cd server
         npm run build
 
     - name: Test server (if tests exist)

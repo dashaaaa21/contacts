@@ -163,8 +163,18 @@ const contactsSlice = createSlice({
       .addCase(removeContact.fulfilled, (state, action) => {
         state.contacts = state.contacts.filter(c => c.id !== action.payload);
       })
+      .addCase(fetchStatuses.pending, (state) => {
+        state.loading = true;
+      })
       .addCase(fetchStatuses.fulfilled, (state, action) => {
+        state.loading = false;
         state.contactStatuses = action.payload;
+        console.log('Redux state updated with statuses:', action.payload);
+      })
+      .addCase(fetchStatuses.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
+        console.error('Failed to fetch statuses:', action.error);
       })
       .addCase(createStatus.fulfilled, (state, action) => {
         state.contactStatuses[action.payload.name] = {
