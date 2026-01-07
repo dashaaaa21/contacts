@@ -24,7 +24,8 @@ export default function EditContactStatus() {
     const handleSubmit = async (values) => {
         const statusId = status.id;
         await dispatch(updateStatus({ 
-            id: statusId, 
+            id: statusId,
+            oldStatusName: statusName,
             statusName: values.statusName.toLowerCase(), 
             bg: values.bg 
         }));

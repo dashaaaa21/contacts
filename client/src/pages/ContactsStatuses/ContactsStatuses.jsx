@@ -7,10 +7,6 @@ export default function ContactsStatuses() {
     const loading = useAppSelector(state => state.contacts.loading);
     const dispatch = useAppDispatch();
 
-    console.log('ContactStatuses component - statuses:', contactStatuses);
-    console.log('Loading:', loading);
-    console.log('Status keys:', Object.keys(contactStatuses));
-
     if (loading) {
         return <div className="p-6 text-xl">Loading statuses...</div>;
     }

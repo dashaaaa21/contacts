@@ -105,7 +105,7 @@ export const createStatus = createAsyncThunk(
 
 export const updateStatus = createAsyncThunk(
   'contacts/updateStatus',
-  async ({ id, statusName, bg }) => {
+  async ({ id, oldStatusName, statusName, bg }) => {
     const response = await fetch(`/api/statuses/${id}`, {
       method: 'PUT',
       headers: getAuthHeaders(),
@@ -113,7 +113,7 @@ export const updateStatus = createAsyncThunk(
     });
     if (!response.ok) throw new Error('Failed to update status');
     const data = await response.json();
-    return { oldName: statusName, newName: data.name, id: data._id, bg: data.color };
+    return { oldName: oldStatusName, newName: data.name, id: data._id, bg: data.color };
   }
 );
 
@@ -153,14 +153,34 @@ const contactsSlice = createSlice({
       })
       .addCase(createContact.fulfilled, (state, action) => {
         state.contacts.push(action.payload);
+        const statusName = action.payload.status;
+        if (state.contactStatuses[statusName]) {
+          state.contactStatuses[statusName].count += 1;
+        }
       })
       .addCase(updateContact.fulfilled, (state, action) => {
         const index = state.contacts.findIndex(c => c.id === action.payload.id);
         if (index !== -1) {
+          const oldStatus = state.contacts[index].status;
+          const newStatus = action.payload.status;
+          
+          if (oldStatus !== newStatus) {
+            if (state.contactStatuses[oldStatus]) {
+              state.contactStatuses[oldStatus].count -= 1;
+            }
+            if (state.contactStatuses[newStatus]) {
+              state.contactStatuses[newStatus].count += 1;
+            }
+          }
+          
           state.contacts[index] = action.payload;
         }
       })
       .addCase(removeContact.fulfilled, (state, action) => {
+        const contact = state.contacts.find(c => c.id === action.payload);
+        if (contact && state.contactStatuses[contact.status]) {
+          state.contactStatuses[contact.status].count -= 1;
+        }
         state.contacts = state.contacts.filter(c => c.id !== action.payload);
       })
       .addCase(fetchStatuses.pending, (state) => {
@@ -169,12 +189,10 @@ const contactsSlice = createSlice({
       .addCase(fetchStatuses.fulfilled, (state, action) => {
         state.loading = false;
         state.contactStatuses = action.payload;
-        console.log('Redux state updated with statuses:', action.payload);
       })
       .addCase(fetchStatuses.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message;
-        console.error('Failed to fetch statuses:', action.error);
       })
       .addCase(createStatus.fulfilled, (state, action) => {
         state.contactStatuses[action.payload.name] = {
