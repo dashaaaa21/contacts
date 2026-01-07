@@ -43,7 +43,17 @@ jobs:
         cd server
         npm test --if-present
 
-  deploy:
+  deploy-server:
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    
+    steps:
+    - name: Deploy server to Render
+      run: |
+        curl -X POST ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
+
+  deploy-client:
     needs: test
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
@@ -52,25 +62,11 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
-    - name: Setup Node.js
-      uses: actions/setup-node@v4
+    - name: Deploy client to Vercel
+      uses: amondnet/vercel-action@v25
       with:
-        node-version: '18'
-        cache: 'npm'
-        cache-dependency-path: |
-          client/package-lock.json
-          server/package-lock.json
-
-    - name: Install and build client
-      run: |
-        cd client
-        npm ci
-        npm run build
-
-    - name: Deploy to production
-      run: |
-        echo "Deploying to production..."
-        echo "Client built successfully"
-        echo "Ready for deployment to your hosting service"
-        
-  
+        vercel-token: ${{ secrets.VERCEL_TOKEN }}
+        vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+        vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+        working-directory: ./client
+        vercel-args: '--prod'
