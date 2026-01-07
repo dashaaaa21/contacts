@@ -30,9 +30,3 @@ jobs:
         cd server
         npm test --if-present
 
-    - name: Deploy to Railway
-      run: |
-        cd server
-        echo "Ready to deploy server to Railway"
-        echo "Configure RAILWAY_TOKEN in repository secrets"
-        
