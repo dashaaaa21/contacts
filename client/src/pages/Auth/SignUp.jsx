@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { useAppDispatch } from '../../redux/hooks';
 import { setUser } from '../../redux/authSlice';
 
+const API_URL = import.meta.env.VITE_API_URL || '';
+
 export default function SignUp() {
   const dispatch = useAppDispatch();
   const [name, setName] = useState('');
@@ -22,7 +24,7 @@ export default function SignUp() {
     setMessage('');
 
     try {
-      const response = await fetch('/api/auth/register', {
+      const response = await fetch(`${API_URL}/api/auth/register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name, email, password }),

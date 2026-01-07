@@ -1,5 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
+const API_URL = import.meta.env.VITE_API_URL || '';
+
 const initialState = {
   contacts: [],
   contactStatuses: {},
@@ -19,7 +21,7 @@ const getAuthHeaders = () => {
 export const fetchContacts = createAsyncThunk(
   'contacts/fetchContacts',
   async () => {
-    const response = await fetch('/api/contacts', {
+    const response = await fetch(`${API_URL}/api/contacts`, {
       headers: getAuthHeaders()
     });
     if (!response.ok) throw new Error('Failed to fetch contacts');
@@ -31,7 +33,7 @@ export const fetchContacts = createAsyncThunk(
 export const createContact = createAsyncThunk(
   'contacts/createContact',
   async (contact) => {
-    const response = await fetch('/api/contacts', {
+    const response = await fetch(`${API_URL}/api/contacts`, {
       method: 'POST',
       headers: getAuthHeaders(),
       body: JSON.stringify(contact)
@@ -45,7 +47,7 @@ export const createContact = createAsyncThunk(
 export const updateContact = createAsyncThunk(
   'contacts/updateContact',
   async ({ id, contact }) => {
-    const response = await fetch(`/api/contacts/${id}`, {
+    const response = await fetch(`${API_URL}/api/contacts/${id}`, {
       method: 'PUT',
       headers: getAuthHeaders(),
       body: JSON.stringify(contact)
@@ -59,7 +61,7 @@ export const updateContact = createAsyncThunk(
 export const removeContact = createAsyncThunk(
   'contacts/removeContact',
   async (id) => {
-    const response = await fetch(`/api/contacts/${id}`, {
+    const response = await fetch(`${API_URL}/api/contacts/${id}`, {
       method: 'DELETE',
       headers: getAuthHeaders()
     });
@@ -71,7 +73,7 @@ export const removeContact = createAsyncThunk(
 export const fetchStatuses = createAsyncThunk(
   'contacts/fetchStatuses',
   async () => {
-    const response = await fetch('/api/statuses', {
+    const response = await fetch(`${API_URL}/api/statuses`, {
       headers: getAuthHeaders()
     });
     if (!response.ok) throw new Error('Failed to fetch statuses');
@@ -92,7 +94,7 @@ export const fetchStatuses = createAsyncThunk(
 export const createStatus = createAsyncThunk(
   'contacts/createStatus',
   async ({ statusName, bg }) => {
-    const response = await fetch('/api/statuses', {
+    const response = await fetch(`${API_URL}/api/statuses`, {
       method: 'POST',
       headers: getAuthHeaders(),
       body: JSON.stringify({ name: statusName, color: bg })
@@ -106,7 +108,7 @@ export const createStatus = createAsyncThunk(
 export const updateStatus = createAsyncThunk(
   'contacts/updateStatus',
   async ({ id, oldStatusName, statusName, bg }) => {
-    const response = await fetch(`/api/statuses/${id}`, {
+    const response = await fetch(`${API_URL}/api/statuses/${id}`, {
       method: 'PUT',
       headers: getAuthHeaders(),
       body: JSON.stringify({ name: statusName, color: bg })
@@ -120,7 +122,7 @@ export const updateStatus = createAsyncThunk(
 export const removeStatus = createAsyncThunk(
   'contacts/removeStatus',
   async ({ id, statusName }) => {
-    const response = await fetch(`/api/statuses/${id}`, {
+    const response = await fetch(`${API_URL}/api/statuses/${id}`, {
       method: 'DELETE',
       headers: getAuthHeaders()
     });
