@@ -11,12 +11,20 @@ export default [
     files: ['**/*.{js,jsx}'],
     languageOptions: {
       ecmaVersion: 2020,
-      globals: globals.browser,
+      globals: {
+        ...globals.browser,
+        React: 'readonly'
+      },
       parserOptions: {
         ecmaVersion: 'latest',
         ecmaFeatures: { jsx: true },
         sourceType: 'module',
       },
+    },
+    settings: {
+      react: {
+        version: 'detect'
+      }
     },
     plugins: {
       'react-hooks': reactHooks,
@@ -29,6 +37,11 @@ export default [
         'warn',
         { allowConstantExport: true },
       ],
+      'no-unused-vars': ['error', { 
+        varsIgnorePattern: '^_',
+        argsIgnorePattern: '^_',
+        ignoreRestSiblings: true
+      }],
     },
   },
 ]

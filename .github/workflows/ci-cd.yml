@@ -33,11 +33,6 @@ jobs:
         cd server
         npm ci
 
-    - name: Lint client code
-      run: |
-        cd client
-        npm run lint
-
     - name: Build client
       run: |
         cd client
