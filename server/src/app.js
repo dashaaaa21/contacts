@@ -10,21 +10,25 @@ const corsOptions = {
   origin: function (origin, callback) {
     const allowedOrigins = [
       'http://localhost:5173',
+      'http://localhost:5174',
       'http://localhost:5175',
       process.env.CLIENT_URL
     ].filter(Boolean);
     
-    // Allow requests with no origin (like mobile apps or curl requests)
     if (!origin) return callback(null, true);
     
-    // Allow all Vercel preview deployments
-    if (origin.includes('vercel.app')) {
+    if (origin && origin.includes('vercel.app')) {
+      return callback(null, true);
+    }
+    
+    if (origin && origin.includes('onrender.com')) {
       return callback(null, true);
     }
     
     if (allowedOrigins.some(allowed => origin === allowed || origin.startsWith(allowed.replace(/\/$/, '')))) {
       callback(null, true);
     } else {
+      console.log('CORS blocked origin:', origin);
       callback(new Error('Not allowed by CORS'));
     }
   },
