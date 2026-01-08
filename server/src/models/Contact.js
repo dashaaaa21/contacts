@@ -28,8 +28,10 @@ const contactSchema = new Schema(
       lowercase: true,
     },
     avatar: {
-      type: String,
-      default: '',
+      type: Number,
+      default: 1,
+      min: 1,
+      max: 99,
     },
     gender: {
       type: String,

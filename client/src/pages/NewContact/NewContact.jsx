@@ -16,7 +16,7 @@ export default function NewContact() {
         lastName: '',
         phone: '',
         email: '',
-        avatar: '',
+        avatar: Math.floor(Math.random() * 99) + 1,
         gender: 'men',
         status: '',
         favorite: false,
@@ -126,19 +126,6 @@ export default function NewContact() {
                                         className="border-b-2 border-gray-300 focus:border-lime-400 px-0 py-2 text-sm sm:text-base focus:outline-none transition-colors bg-white text-black"
                                     />
                                     <ErrorMessage name="email" component="div" className="text-red-500 text-xs mt-1 min-h-[16px]" />
-                                </div>
-
-                                <div className="flex flex-col h-20">
-                                    <label htmlFor="avatar" className="text-black font-semibold mb-1 sm:mb-2 text-xs sm:text-sm uppercase tracking-wide">
-                                        Avatar URL
-                                    </label>
-                                    <Field
-                                        type="text"
-                                        name="avatar"
-                                        id="avatar"
-                                        className="border-b-2 border-gray-300 focus:border-lime-400 px-0 py-2 text-sm sm:text-base focus:outline-none transition-colors bg-white text-black"
-                                    />
-                                    <ErrorMessage name="avatar" component="div" className="text-red-500 text-xs mt-1 min-h-[16px]" />
                                 </div>
 
                                 <div className="flex flex-col h-20">

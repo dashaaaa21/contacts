@@ -37,7 +37,7 @@ export const contactValidationSchema = Yup.object().shape({
   email: Yup.string()
     .email('Invalid email')
     .required('Required'),
-  avatar: Yup.string(),
+  avatar: Yup.number(),
   gender: Yup.string()
     .required('Required'),
   status: Yup.string()
