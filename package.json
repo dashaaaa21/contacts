@@ -4,7 +4,7 @@
   "description": "Full-stack Contact Manager with React + Node.js + MongoDB",
   "scripts": {
     "dev": "concurrently \"npm run dev --prefix server\" \"npm run dev --prefix client\"",
-    "build": "cd client && npm install && npm run build",
+    "build": "echo 'No build needed for backend'",
     "start": "cd server && npm install --production && node server.js",
     "install:all": "npm install && npm install --prefix client && npm install --prefix server",
     "lint": "npm run lint --prefix client",
