@@ -17,7 +17,7 @@ const corsOptions = {
     
     if (!origin) return callback(null, true);
     
-    if (origin && origin.includes('vercel.app')) {
+    if (origin && (origin.includes('vercel.app') || origin.includes('vercel.com'))) {
       return callback(null, true);
     }
     
@@ -26,13 +26,15 @@ const corsOptions = {
     }
     
     if (allowedOrigins.some(allowed => origin === allowed || origin.startsWith(allowed.replace(/\/$/, '')))) {
-      callback(null, true);
+      return callback(null, true);
     } else {
       console.log('CORS blocked origin:', origin);
       callback(new Error('Not allowed by CORS'));
     }
   },
   credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
   optionsSuccessStatus: 200
 };
 
