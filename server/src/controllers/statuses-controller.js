@@ -3,7 +3,12 @@ import Contact from '../models/Contact.js';
 
 export const getStatuses = async (req, res) => {
   try {
-    const statuses = await Status.find({ userId: req.userId });
+    let statuses = await Status.find({ userId: req.userId });
+    
+    if (statuses.length === 0) {
+      await initializeDefaultStatuses(req.userId);
+      statuses = await Status.find({ userId: req.userId });
+    }
     
     const contacts = await Contact.find({ userId: req.userId });
     const statusCounts = {};

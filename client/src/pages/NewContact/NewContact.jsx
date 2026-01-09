@@ -16,14 +16,18 @@ export default function NewContact() {
         lastName: '',
         phone: '',
         email: '',
-        avatar: Math.floor(Math.random() * 99) + 1,
+        avatar: 1,
         gender: 'men',
         status: '',
         favorite: false,
     };
 
     const handleSubmit = (value) => {
-        dispatch(createContact(value));
+        const contactData = {
+            ...value,
+            avatar: Math.floor(Math.random() * 99) + 1
+        };
+        dispatch(createContact(contactData));
         navigate('/');
     };
 

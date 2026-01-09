@@ -10,16 +10,16 @@ const corsOptions = {
   origin: function (origin, callback) {
     const allowedOrigins = [
       'http://localhost:5173',
+      'http://localhost:5175',
       process.env.CLIENT_URL
     ].filter(Boolean);
     
     if (!origin) return callback(null, true);
     
-    if (origin && (origin.includes('vercel.app') || origin.includes('vercel.com'))) {
-      return callback(null, true);
-    }
+    const isVercel = origin.includes('vercel.app') || origin.includes('vercel.com');
+    const isRender = origin.includes('onrender.com');
     
-    if (origin && origin.includes('onrender.com')) {
+    if (isVercel || isRender) {
       return callback(null, true);
     }
     
